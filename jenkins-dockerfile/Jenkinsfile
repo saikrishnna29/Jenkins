@@ -2,7 +2,7 @@
 pipeline {
     agent {
         dockerfile {
-            args: "--build-arg USER=Krishna" 
+            args "--build-arg USER=Krishna" 
         }
     }
     parameters { //interactive input
