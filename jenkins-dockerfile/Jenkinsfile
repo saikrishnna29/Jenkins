@@ -22,9 +22,6 @@ pipeline {
                 message "should we continue?"
                 ok "Yes, go ahead"
             }
-            when {
-                branch 'main'
-            }
             steps {
                sh 'mvn -version'
             }
