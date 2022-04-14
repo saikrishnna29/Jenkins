@@ -6,6 +6,9 @@ pipeline {
             additionalBuildArgs '--build-arg USER=Krishna' 
         }
     }
+    triggers { 
+        pollSCM('*/10 * * * 1-5') 
+    }
     parameters { //interactive input
         choice(name: 'USERNAME', choices: ['Admin','krishna'], description: 'Enter the user name')
     }
