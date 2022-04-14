@@ -1,5 +1,5 @@
 
-FROM ubuntu AS checkout
+FROM ubuntu
 RUN apt-get update -y \
  && apt-get upgrade -y \
  && apt-get install -y git \
