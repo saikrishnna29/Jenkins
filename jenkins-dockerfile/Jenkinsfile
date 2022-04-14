@@ -3,7 +3,7 @@ pipeline {
     agent {
         dockerfile {
             filename "jenkins-dockerfile/Dockerfile"
-            args "--build-arg USER=Krishna" 
+            additionalBuildArgs '--build-arg USER=Krishna' 
         }
     }
     parameters { //interactive input
