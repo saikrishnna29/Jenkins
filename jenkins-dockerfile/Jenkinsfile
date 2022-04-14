@@ -1,0 +1,45 @@
+
+pipeline {
+    agent {
+        dockerfile {
+            args: "--build-arg USER=Krishna" 
+        }
+    }
+    parameters { //interactive input
+        choice(name: 'USERNAME', choices: ['Admin','krishna'], description: 'Enter the user name')
+    }
+    options { 
+        skipStagesAfterUnstable()
+        retry (2) // retries 2 time if the pipeline fails and then stops
+    }
+    stages {
+        stage('maven') {
+            input { //seeks approval for build stage to execute
+                message "should we continue?"
+                ok "Yes, go ahead"
+            }
+            when {
+                environment name: "USERNAME", value: "krishna"
+                branch 'main'
+            }
+            steps {
+               sh 'mvn -version'
+            }
+        }
+        stage('role') {
+            steps {
+                echo "Hello ${params.USERNAME}"
+            }
+        }
+    }
+    post { //post-build step
+        success { //sends mail notification if success
+            mail (body: "${env.BUILD_URL} is successful", subject: 'Test mail', to: 'awsdevopsmavericks@gmail.com')
+        }
+        failure {// sends mail notification if failed
+            mail (body: "${env.BUILD_URL} is failed", 
+            subject: 'Test mail', 
+            to: 'awsdevopsmavericks@gmail.com')
+        }
+    }
+}  
