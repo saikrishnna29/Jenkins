@@ -23,7 +23,6 @@ pipeline {
                 ok "Yes, go ahead"
             }
             when {
-                environment name: "USERNAME", value: "krishna"
                 branch 'main'
             }
             steps {
