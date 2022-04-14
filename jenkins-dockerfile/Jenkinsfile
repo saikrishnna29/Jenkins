@@ -1,4 +1,3 @@
-
 pipeline {
     agent {
         dockerfile {
@@ -10,7 +9,7 @@ pipeline {
         pollSCM('*/10 * * * 1-5') 
     }
     parameters { //interactive input
-        choice(name: 'USERNAME', choices: ['Admin','krishna'], description: 'Enter the user name')
+        choice(name: 'USERNAME', choices: ['Admin','krishna'], description: 'Select the user name')
     }
     options { 
         skipStagesAfterUnstable()
@@ -18,6 +17,11 @@ pipeline {
     }
     stages {
         stage('maven') {
+            when {
+                expression { //this stage is executed only when it is run by Admin
+                    params.USERNAME == 'Admin'
+                }
+            }
             input { //seeks approval for build stage to execute
                 message "should we continue?"
                 ok "Yes, go ahead"
@@ -42,4 +46,4 @@ pipeline {
             to: 'awsdevopsmavericks@gmail.com')
         }
     }
-}  
+}
