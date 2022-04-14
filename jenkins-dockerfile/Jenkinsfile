@@ -2,7 +2,7 @@
 pipeline {
     agent {
         dockerfile {
-            filename "Jenkins/jenkins-dockerfile/Dockerfile"
+            filename "jenkins-dockerfile/Dockerfile"
             args "--build-arg USER=Krishna" 
         }
     }
