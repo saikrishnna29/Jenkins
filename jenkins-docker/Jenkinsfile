@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('image') {
             steps {
-                sh 'docker build -t saikrishnna29/ubuntu-httpd:${params.TAG} .'
+                sh 'docker build -t saikrishnna29/httpd:${params.TAG} .'
             }
         }
         stage('login') {
