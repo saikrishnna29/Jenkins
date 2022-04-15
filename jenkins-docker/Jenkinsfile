@@ -5,12 +5,12 @@ pipeline {
         string(name:'TAG', defaultValue: 'v1', description: 'Enter the image tag version')
     }
     environment {
-                DOCKERHUB_CRED = credentials('jenkins-dockerhub-credentials')
+       DOCKERHUB_CRED = credentials('jenkins-dockerhub-credentials')
     }
     stages {
         stage('image') {
             steps {
-                sh "docker build -t saikrishnna29/httpd:${params.TAG} ."
+                sh "docker build -t saikrishnna29/httpd:${params.TAG} -f jenkins-docker/Dockerfile"
             }
         }
         stage('login') {
