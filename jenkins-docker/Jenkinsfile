@@ -1,0 +1,32 @@
+
+pipeline {
+    agent any
+    parameters {
+        string(name:'TAG', defaultValue: 'v1', description: 'Enter the image tag version')
+    }
+    stages {
+        stage('image') {
+            steps {
+                sh 'docker build -t saikrishnna29/ubuntu-httpd:${params.TAG} .'
+            }
+        }
+        stage('login') {
+            environment {
+                DOCKERHUB_CRED = credentials('jenkins-dockerhub-credentials')
+            }
+            steps {
+                sh 'echo $DOCKERHUB_CRED_PSW | docker login -u $DOCKERHUB_CRED_USR --password-stdin'
+            }
+        }
+        stage('push') {
+            steps {
+                sh 'docker push saikrishnna29/ubuntu-httpd:${params.TAG}'
+            }
+        }
+        stage('containerRun') {
+            steps {
+                sh 'docker run -d -i -t --name httpd-${params.TAG} -p 80:80 saikrishnna29/ubuntu-httpd:${params.TAG}'
+            }
+        }
+    }
+}
