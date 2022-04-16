@@ -1,26 +1,45 @@
-
 pipeline {
     agent any
     triggers {
-        pollSCM('* * * * *')
+        pollSCM('*/15 * * * 1-5')
     }
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
     }
+    parameters {
+        string(name: 'TAG', defaultValue: '', description: 'Enter the version of the image')
+    }
+    options {
+        skipStagesAfterUnstable()
+        retry (2)
+    }
     stages {
         stage('build') {
             steps {
-                sh 'docker image build -t saikrishnna29/git-httpd:v1 jenkins-docker'
+                sh "docker image build -t saikrishnna29/git-httpd:${params.TAG} jenkins-docker"
             }
         }
-        stage('Login') {
+        stage('Login') {// docker hub registry login
             steps {
                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
             }
         }
-        stage('push') {
+        stage('push') {// pushing docker image to dockerhub registry
             steps {
-                sh 'docker push saikrishnna29/git-httpd:v1'
+                sh "docker push saikrishnna29/git-httpd:${params.TAG}"
+            }
+        }
+        stage('containerRun') {// starting the container
+            steps {
+                sh "docker run -d -i -t --name git-httpd:${params.TAG} -p 563:80 saikrishnna29/git-httpd:${params.TAG}"
+            }
+        }
+        post {
+            failure {
+                mail (body: "The ${env.BUILD_URL} is failed", subject: 'DockerPipeline job', to: 'awsdevopsmavericks@gmail.com')
+            }
+            success {
+                mail (body: "The ${env.BUILD_URL} is successful", subject: 'DockerPipeline job', to: 'awsdevopsmavericks@gmail.com')
             }
         }
     }
