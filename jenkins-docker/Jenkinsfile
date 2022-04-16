@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        dockerfile {
+            filename "jenkins-docker/Dockerfile"
+        }
+    }
     parameters {
         string(name:'TAG', defaultValue: 'v1', description: 'Enter the image tag version')
     }
