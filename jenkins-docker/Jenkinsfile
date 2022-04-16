@@ -1,27 +1,26 @@
+
 pipeline {
-    agent {
-        dockerfile {
-            filename "jenkins-docker/Dockerfile"
-            additionalBuildArgs "--tag saikrishnna29/httpd:v1"
-        }
+    agent any
+    triggers {
+        pollSCM('* * * * *')
     }
     environment {
-       DOCKERHUB_CRED = credentials('dockerhub-credentials')
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
     }
     stages {
-        stage('login') {
+        stage('build') {
             steps {
-                sh 'echo $DOCKERHUB_CRED_PSW | docker login -u $DOCKERHUB_CRED_USR --password-stdin'
+                sh 'docker image build -t saikrishnna29/httpd:v1 .'
+            }
+        }
+        stage('Login') {
+            steps {
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
             }
         }
         stage('push') {
             steps {
-                sh "docker push saikrishnna29/httpd:v1"
-            }
-        }
-        stage('containerRun') {
-            steps {
-                sh "docker run -d -i -t --name httpd -p 80:80 saikrishnna29/httpd:v1"
+                sh 'docker push saikrishnna/httpd:v1'
             }
         }
     }
