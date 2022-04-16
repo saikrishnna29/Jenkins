@@ -16,7 +16,7 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                sh "docker image build -t saikrishnna29/git-httpd:${params.TAG} jenkins-docker"
+                sh "docker image build -t saikrishnna29/httpd-git:${params.TAG} jenkins-docker"
             }
         }
         stage('Login') {// docker hub registry login
@@ -26,12 +26,12 @@ pipeline {
         }
         stage('push') {// pushing docker image to dockerhub registry
             steps {
-                sh "docker push saikrishnna29/git-httpd:${params.TAG}"
+                sh "docker push saikrishnna29/httpd-git:${params.TAG}"
             }
         }
         stage('containerRun') {// starting the container
             steps {
-                sh "docker run -d -i -t --name githttpd -p 80:80 saikrishnna29/git-httpd:${params.TAG}"
+                sh "docker run -d -i -t --name githttpd -p 80:80 saikrishnna29/httpd-git:${params.TAG}"
             }
         }
     }
