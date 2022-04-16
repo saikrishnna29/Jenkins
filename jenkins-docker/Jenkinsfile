@@ -1,10 +1,5 @@
-
 pipeline {
-    agent {
-      dockerfile {
-        filename "jenkins-docker/Dockerfile"
-        }
-    }
+    agent any
     parameters {
         string(name:'TAG', defaultValue: 'v1', description: 'Enter the image tag version')
     }
@@ -14,7 +9,7 @@ pipeline {
     stages {
         stage('image') {
             steps {
-                sh "docker build -t saikrishnna29/httpd:${params.TAG} jenkins-docker/Dockerfile"
+                sh "docker build -t saikrishnna29/httpd:${params.TAG} ."
             }
         }
         stage('login') {
