@@ -9,7 +9,7 @@ pipeline {
         string(name:'TAG', defaultValue: 'v1', description: 'Enter the image tag version')
     }
     environment {
-       DOCKERHUB_CRED = credentials('jenkins-dockerhub-credentials')
+       DOCKERHUB_CRED = credentials('dockerhub-credentials')
     }
     stages {
         stage('image') {
