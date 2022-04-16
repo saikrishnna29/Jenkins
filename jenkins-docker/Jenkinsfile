@@ -34,13 +34,13 @@ pipeline {
                 sh "docker run -d -i -t --name git-httpd:${params.TAG} -p 563:80 saikrishnna29/git-httpd:${params.TAG}"
             }
         }
-        post {
-            failure {
-                mail (body: "The ${env.BUILD_URL} is failed", subject: 'DockerPipeline job', to: 'awsdevopsmavericks@gmail.com')
-            }
-            success {
-                mail (body: "The ${env.BUILD_URL} is successful", subject: 'DockerPipeline job', to: 'awsdevopsmavericks@gmail.com')
-            }
+    }
+    post {
+        failure {
+            mail (body: "The ${env.BUILD_URL} is failed", subject: 'DockerPipeline job', to: 'awsdevopsmavericks@gmail.com')
+        }
+        success {
+            mail (body: "The ${env.BUILD_URL} is successful", subject: 'DockerPipeline job', to: 'awsdevopsmavericks@gmail.com')
         }
     }
 }
