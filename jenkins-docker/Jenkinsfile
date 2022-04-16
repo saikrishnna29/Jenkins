@@ -31,7 +31,7 @@ pipeline {
         }
         stage('containerRun') {// starting the container
             steps {
-                sh "docker run -d -i -t --name githttpd:${params.TAG} -p 563:80 saikrishnna29/git-httpd:${params.TAG}"
+                sh "docker run -d -i -t --name githttpd -p 563:80 saikrishnna29/git-httpd:${params.TAG}"
             }
         }
     }
