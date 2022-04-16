@@ -2,20 +2,13 @@ pipeline {
     agent {
         dockerfile {
             filename "jenkins-docker/Dockerfile"
+            additionalBuildArgs "--tag saikrishnna29/httpd:v1"
         }
-    }
-    parameters {
-        string(name:'TAG', defaultValue: 'v1', description: 'Enter the image tag version')
     }
     environment {
        DOCKERHUB_CRED = credentials('dockerhub-credentials')
     }
     stages {
-        stage('image') {
-            steps {
-                sh "docker build -t saikrishnna29/httpd:${params.TAG} ."
-            }
-        }
         stage('login') {
             steps {
                 sh 'echo $DOCKERHUB_CRED_PSW | docker login -u $DOCKERHUB_CRED_USR --password-stdin'
@@ -23,12 +16,12 @@ pipeline {
         }
         stage('push') {
             steps {
-                sh "docker push saikrishnna29/ubuntu-httpd:${params.TAG}"
+                sh "docker push saikrishnna29/httpd:v1"
             }
         }
         stage('containerRun') {
             steps {
-                sh "docker run -d -i -t --name httpd-${params.TAG} -p 80:80 saikrishnna29/ubuntu-httpd:${params.TAG}"
+                sh "docker run -d -i -t --name httpd -p 80:80 saikrishnna29/httpd:v1"
             }
         }
     }
