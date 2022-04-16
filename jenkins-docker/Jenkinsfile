@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage('image') {
             steps {
-                sh "docker build -t saikrishnna29/httpd:${params.TAG} . "
+                sh "docker build -t saikrishnna29/httpd:${params.TAG} jenkins-docker/Dockerfile"
             }
         }
         stage('login') {
