@@ -20,7 +20,7 @@ pipeline {
         }
         stage('push') {
             steps {
-                sh 'docker push saikrishnna/httpd:v1'
+                sh 'docker push saikrishnna29/git-httpd:v1'
             }
         }
     }
